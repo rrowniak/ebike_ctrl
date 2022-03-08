@@ -113,3 +113,44 @@ BOOST_AUTO_TEST_CASE(electric_Wh_km_c_test, * utf::tolerance(0.01))
               //----------------
     BOOST_TEST("    0W 63.7Wh/km" == hd44780_get_line1());
 }
+
+BOOST_AUTO_TEST_CASE(distance_overflow_test, * utf::tolerance(0.01))
+{
+    logic_init();
+    ui_set_display_mode(DM_DEFAULT);
+
+    // 1.830 m == 16 pulses
+    // 65,3km ==> 570929 pulses (overflow happened here)
+    // 100km = 100 000m => ~874 317 pulses
+
+    HAL_Tick = 13;
+    int dist = 0;
+    int oneKm = 8743; // ticks per km
+    
+    for (int i = 0; i < 66; ++i) {
+        InsertCanMessage(BuildMotionMsg(dist));
+        logic_update();
+
+        HAL_Tick += 1000000;
+        dist += oneKm;
+    }
+
+    // overflow here!
+    InsertCanMessage(BuildMotionMsg(dist));
+    HAL_Tick += 1000000;
+    dist += oneKm;
+
+    for (int i = 67; i < 200; ++i) {
+        InsertCanMessage(BuildMotionMsg(dist));
+        logic_update();
+
+        HAL_Tick += 1000000;
+        dist += oneKm;
+    }
+
+    HAL_Tick += 13;
+    logic_update();
+
+              //----------------
+    BOOST_TEST("105 km/h 198.9km" == hd44780_get_line1());
+}

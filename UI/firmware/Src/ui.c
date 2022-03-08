@@ -97,10 +97,10 @@ void ui_disable_amp_gauges(void)
     current = 0;
 }
 
-static void _displ_trip(uint8_t speed, uint16_t dist_m, uint8_t trip_num)
+static void _displ_trip(uint8_t speed, uint32_t dist_m, uint8_t trip_num)
 {
-    int d_km = dist_m / 1000;
-    int d_01 = (dist_m - d_km * 1000) / 100;
+    int32_t d_km = dist_m / 1000;
+    int32_t d_01 = (dist_m - d_km * 1000) / 100;
     
     if (d_km < 10000) {
         if (trip_num == 0) {
