@@ -102,11 +102,17 @@ static void _displ_trip(uint8_t speed, uint32_t dist_m, uint8_t trip_num)
     int32_t d_km = dist_m / 1000;
     int32_t d_01 = (dist_m - d_km * 1000) / 100;
     
-    if (d_km < 10000) {
+    if (d_km < 1000 && speed < 100) {
         if (trip_num == 0) {
             lcd_printfln("%d km/h %d.%dkm", speed, d_km, d_01);
         } else {
             lcd_printfln("%d km/h %d.%dkm-%d", speed, d_km, d_01, trip_num);
+        }
+    } else if (d_km < 1000) {
+        if (trip_num == 0) {
+            lcd_printfln("%d km/h %dkm", speed, d_km);
+        } else {
+            lcd_printfln("%d km/h %dkm-%d", speed, d_km, trip_num);
         }
     } else {
         if (trip_num == 0) {
@@ -147,10 +153,12 @@ void ui_update(const struct vehicle_gauges* vg)
         _displ_trip(vg->speed_kmh, vg->trip2_m, 2);
         break;
     case DM_TEMP:
-        lcd_printfln("%dC %dC %dC %dC", vg->ambient_temp
-            , (vg->moto_temp < 0) ? 0 : vg->moto_temp
-            , (vg->driver_temp < 0) ? 0 : vg->driver_temp
-            , (vg->batt_temp < 0) ? 0 : vg->batt_temp);
+        // lcd_printfln("%dC %dC %dC %dC", vg->ambient_temp
+        //     , (vg->moto_temp < 0) ? 0 : vg->moto_temp
+        //     , (vg->driver_temp < 0) ? 0 : vg->driver_temp
+        //     , (vg->batt_temp < 0) ? 0 : vg->batt_temp);
+        lcd_printfln("%dC Mot=%dC", vg->ambient_temp
+            , (vg->moto_temp < 0) ? 0 : vg->moto_temp);
         break;
     case DM_POWER:
         lcd_printfln("-%.1fWh +%.1fWh", vg->consumed_Wh, vg->brake_Wh);

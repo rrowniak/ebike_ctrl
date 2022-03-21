@@ -49,17 +49,9 @@ static uint8_t beep_cnt = 0;
 static uint16_t motherboard_watchdog = 0;
 static uint8_t first_motherboard_el_update = 1;
 
-static inline uint32_t _convert_to_mm(const struct vehicle_conf* vc, 
-    uint32_t pulses)
-{
-    return pulses * vc->dist_p_rev_mm / vc->pulse_p_rev;
-}
+static CAN_TxHeaderTypeDef can_header;
 
-static inline uint32_t _convert_to_m(const struct vehicle_conf* vc,
-    uint32_t pulses)
-{
-    return _convert_to_mm(vc, pulses) / 1000;
-}
+static uint8_t lights_toogle = 1;
 
 static void _load_config(
     struct vehicle_conf* vc,
@@ -128,6 +120,55 @@ static void _load_config(
     LOG("SUCCESS.");
 }
 
+static void _send_can(uint8_t data[])
+{
+    uint32_t mailbox = 0;
+
+    if (HAL_CAN_GetTxMailboxesFreeLevel(&hcan) > 0) {
+        // there is a free mailbox
+        HAL_StatusTypeDef ret;
+        ret = HAL_CAN_AddTxMessage(&hcan, &can_header, data, &mailbox);
+        if (ret != HAL_OK) {
+            LOG2("Error HAL_CAN_AddTxMessage: ", ret);
+        }
+    } else {
+        LOG("No free mailboxes");
+    }
+}
+
+void can_send_lights(int on)
+{
+    uint8_t data[8];
+    
+    data[0] = BCP_MSG_CMD;
+
+    struct bcp_msg_cmd* cmd = (struct bcp_msg_cmd*)&data[1];
+
+    if (on) {
+        cmd->cmd_id = CMD_ID_LIGHTS_ON;
+    } else {
+        cmd->cmd_id = CMD_ID_LIGHTS_OFF;
+    }
+
+    _send_can(data);
+}
+
+void lights_toogle_send() {
+    if (lights_toogle) {
+        // send lights on
+        can_send_lights(1);
+    } else {
+        // send lights off
+        can_send_lights(0);
+    }
+
+    if (lights_toogle) {
+        lights_toogle = 0;
+    } else {
+        lights_toogle = 1;
+    }
+}
+
 void logic_init(void)
 {
     ui_init();
@@ -168,6 +209,14 @@ void logic_init(void)
     if (ret != HAL_OK) {
         LOG2("Fail HAL_CAN_Start ", ret);
     }
+
+     // initialize header
+    can_header.StdId = 0xAA;
+    can_header.ExtId = 0xAA;
+    can_header.IDE = CAN_ID_STD;
+    can_header.RTR = CAN_RTR_DATA;
+    can_header.DLC = 8;
+    can_header.TransmitGlobalTime = DISABLE;
 
     vg.ambient_temp = readTemp();
 }
@@ -309,6 +358,7 @@ void logic_update(void)
 
         if (btn_3_watchdog == 50) {
             lcd_backlight_toogle();
+            lights_toogle_send();
             lock_display_mode = 1;
         }
 

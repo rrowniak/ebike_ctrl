@@ -28,10 +28,29 @@
 
 #include <stm32f1xx.h>
 #include <stdint.h>
+#include "state.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+static inline uint32_t _convert_to_mm(const struct vehicle_conf* vc, 
+    uint32_t pulses)
+{
+    return pulses * vc->dist_p_rev_mm / vc->pulse_p_rev;
+}
+
+static inline uint32_t _convert_to_m(const struct vehicle_conf* vc,
+    uint32_t pulses)
+{
+    uint32_t p = pulses / vc->pulse_p_rev;
+    // rounding & overflow problems
+    if (pulses > 50000000) {
+        return (p / 1000) * vc->dist_p_rev_mm;
+    } else {
+        return p * vc->dist_p_rev_mm / 1000;
+    }
+}
 
 void logic_init(void);
 void logic_update(void);

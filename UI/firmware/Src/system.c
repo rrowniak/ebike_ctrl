@@ -120,8 +120,8 @@ int8_t readTemp(void)
     float adc_v = V_REF * sum / (float)(3 * 4095);
     
     // dummy error correction
-    adc_v += 0.2;
-    // LOG2("readTemp done: ", (int32_t)(adc_v*1000));
+    adc_v += 0.05;
+    //  LOG2("Read temp [V]: ", (int32_t)(adc_v*1000));
 
     float rt = adc_v * 2200.0 / (V_REF_5V - adc_v);
     // LOG2("Calculated resistance: ", (uint32_t)(rt*1000));

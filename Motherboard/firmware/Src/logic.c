@@ -34,6 +34,8 @@
 #include <lrr_utils.h>
 #include <lrr_kty8x.h>
 
+#include <bike_can_protocol.h> 
+
 #include <string.h>
 
 struct adc_conv_results
@@ -65,6 +67,7 @@ struct self_calibration_results
 
 extern UART_HandleTypeDef huart1;
 extern ADC_HandleTypeDef hadc1;
+extern CAN_HandleTypeDef hcan;
 
 static volatile uint32_t pulse_cnt = 0;
 
@@ -200,10 +203,10 @@ static void _read_all_adc(void)
 
     if (calibration.state == CAL_STATUS_FINE) {
         // check which sensor is available
-        if (!(calibration.test & MOTO_KTY83_FAILED)) {
-            last_convertion.moto_t = _conv_moto_temp(rawValues[4]);
-        } else if (!(calibration.test & MOTO_NTC_FAILED)) {
+        if (!(calibration.test & MOTO_NTC_FAILED)) {
             last_convertion.moto_t = _conv_temp_NTC(rawValues[5]);
+        } else if (!(calibration.test & MOTO_KTY83_FAILED)) {
+            last_convertion.moto_t = _conv_moto_temp(rawValues[4]);
         }
     } else if (calibration.state == CAL_STATUS_NEEDED) {
         // we don't know yet which sensor is connected
@@ -229,6 +232,16 @@ static void _read_all_adc(void)
     }
 }
 
+void lights(int on) {
+    if (on) {
+        // turn on
+        HAL_GPIO_WritePin(LIGHTS_GPIO_Port, LIGHTS_Pin, GPIO_PIN_SET);
+    } else {
+        // turn off
+        HAL_GPIO_WritePin(LIGHTS_GPIO_Port, LIGHTS_Pin, GPIO_PIN_RESET);
+    }
+}
+
 void logic_init(void)
 {
     usart_config(&huart1);
@@ -242,7 +255,32 @@ void logic_init(void)
 
 void logic_update(void)
 {
-    uint32_t now_ms = HAL_GetTick();    
+    uint32_t now_ms = HAL_GetTick();
+     // check if there any messages waiting on CAN bus
+    uint8_t data[8];
+    CAN_RxHeaderTypeDef can_header;
+    while (HAL_CAN_GetRxFifoFillLevel(&hcan, CAN_RX_FIFO0) > 0) {
+        HAL_StatusTypeDef ret;
+        ret = HAL_CAN_GetRxMessage(&hcan, CAN_RX_FIFO0, &can_header, data);
+        if (ret != HAL_OK) {
+            LOG("CAN ERROR");
+            continue;
+        }
+        // process message
+        switch (data[0])
+        {
+        case BCP_MSG_CMD:
+        {
+            const struct bcp_msg_cmd* cmd = (const struct bcp_msg_cmd*)&data[1];
+            if (cmd->cmd_id == CMD_ID_LIGHTS_ON) {
+                lights(1);
+            } else {
+                lights(0);
+            }
+            break;
+        }
+        }
+    }  
 
     if (__timer_update(&tim50ms, now_ms)) {
         // measure electric units

@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-#define VERSION "1.0"
+#define VERSION "1.4"
 
 #ifdef __cplusplus
 }

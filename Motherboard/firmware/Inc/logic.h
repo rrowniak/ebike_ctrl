@@ -53,7 +53,7 @@ extern "C" {
 #define KTY81_VREF          V_REF_5V
 #define KTY81_RES           2200
 
-#define NTC_VREF            V_REF_5V
+#define NTC_VREF            V_REF
 #define NTC_RES             10000
 
 #define BAD_TEMP            -1000

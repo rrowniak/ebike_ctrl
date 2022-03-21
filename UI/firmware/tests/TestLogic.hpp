@@ -111,6 +111,7 @@ BOOST_AUTO_TEST_CASE(electric_Wh_km_c_test, * utf::tolerance(0.01))
     logic_update();
 
               //----------------
+    // BOOST_TEST("    0W 63.7Wh/km" == hd44780_get_line1());
     BOOST_TEST("    0W 63.7Wh/km" == hd44780_get_line1());
 }
 
@@ -152,5 +153,72 @@ BOOST_AUTO_TEST_CASE(distance_overflow_test, * utf::tolerance(0.01))
     logic_update();
 
               //----------------
-    BOOST_TEST("105 km/h 198.9km" == hd44780_get_line1());
+    // BOOST_TEST("105 km/h 198.9km" == hd44780_get_line1());
+    BOOST_TEST("105 km/h 198km" == hd44780_get_line1());
+}
+
+BOOST_AUTO_TEST_CASE(distance_overflow_test2, * utf::tolerance(0.01))
+{
+    logic_init();
+    ui_set_display_mode(DM_DEFAULT);
+
+    // 1.830 m == 16 pulses
+    // 65,3km ==> 570929 pulses (overflow happened here)
+    // 100km = 100 000m => ~874 317 pulses
+
+    HAL_Tick = 13;
+    int dist = 0;
+    int oneKm = 8743; // ticks per km
+    
+    for (int i = 0; i < 10000; ++i) {
+        InsertCanMessage(BuildMotionMsg(dist));
+        logic_update();
+
+        HAL_Tick += 1000000;
+        dist += oneKm;
+    }
+
+    HAL_Tick += 13;
+    logic_update();
+
+              //----------------
+    BOOST_TEST("105 km/h 9997km" == hd44780_get_line1());
+}
+
+#define TEST_M(exp, got, tolerance) \
+    BOOST_TEST(got <= exp + tolerance); \
+    BOOST_TEST(got >= exp - tolerance)
+
+BOOST_AUTO_TEST_CASE(distance_conversion_test, * utf::tolerance(0.01))
+{
+    vehicle_conf vc;
+    vc.pulse_p_rev = 16;
+    vc.dist_p_rev_mm = 1830;
+    // pulse per 1m = 16 * 1000 / 1830
+
+    // 200m
+    uint32_t pulses = 200'000 * vc.pulse_p_rev / vc.dist_p_rev_mm;
+    auto res = _convert_to_m(&vc, pulses);
+    TEST_M(200, res, 1);
+    // 1km
+    pulses = 1'000'000 * vc.pulse_p_rev / vc.dist_p_rev_mm;
+    res = _convert_to_m(&vc, pulses);
+    TEST_M(1000, res, 1);
+    // 55.7km
+    pulses = 55'700'000 * vc.pulse_p_rev / vc.dist_p_rev_mm;
+    res = _convert_to_m(&vc, pulses);
+    TEST_M(55'700, res, 1);
+    // 100km
+    pulses = 100'000'000 * vc.pulse_p_rev / vc.dist_p_rev_mm;
+    res = _convert_to_m(&vc, pulses);
+    TEST_M(100'000, res, 2);
+
+    // 2 700,7 km
+    pulses = (2'700'700'000 / vc.dist_p_rev_mm) * vc.pulse_p_rev;
+    res = _convert_to_m(&vc, pulses);
+    TEST_M(2'700'700, res, 2);
+    // 9 999,9 km
+    pulses = (9'999'900'000 / vc.dist_p_rev_mm) * vc.pulse_p_rev;
+    res = _convert_to_m(&vc, pulses);
+    TEST_M(9'999'900, res, 900);
 }

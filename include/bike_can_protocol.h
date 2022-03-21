@@ -47,6 +47,7 @@ extern "C" {
 #define BCP_MSG_ELECTRIC      0x01
 #define BCP_MSG_MOTION        0x02
 #define BCP_MSG_SENS_BLK1     0x03
+#define BCP_MSG_CMD           0x04
 
 #define SIGN_MASK_11         0x400
 #define UNSIGNED_MASK_11     0x3FF
@@ -150,6 +151,16 @@ struct bcp_msg_sens_blk1
     uint32_t drv_t        : 9;
     uint32_t batt_t       : 9;
     uint32_t reserved     : 29;
+} __attribute__((__packed__));
+
+#define CMD_ID_LIGHTS_ON    0x01
+#define CMD_ID_LIGHTS_OFF   0x02
+
+struct bcp_msg_cmd
+{
+    uint8_t cmd_id;
+    uint32_t arg1;
+    uint16_t arg2;
 } __attribute__((__packed__));
 
 #ifdef __cplusplus
