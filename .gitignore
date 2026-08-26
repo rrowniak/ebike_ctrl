@@ -1,0 +1,31 @@
+*.lck
+.agents
+AGENTS.md
+archive
+*#
+spec/*.pdf
+.mxproject
+
+# Build output directories
+**/build/
+
+# Compiled object files
+*.o
+*.d
+
+# Firmware binaries
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+
+# Test executables
+tests/test
+
+# Vendor driver libraries (CubeMX-managed, regenerate with STM32CubeMX)
+**/Drivers/
+
+# Prebuilt static/shared libraries
+*.a
+*.lib

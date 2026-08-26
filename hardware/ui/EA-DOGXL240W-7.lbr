@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="9.3.2">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<description>&lt;b&gt;EA DOGXL240W-7 240x128 COG LCD Display&lt;/b&gt;&lt;p&gt;
+Display Visions / Electronic Assembly&lt;br&gt;
+240x128 FSTN, UC1611S controller, SPI/I2C, 3.3V&lt;br&gt;
+40-pin SIP connector, 2.54mm pitch&lt;p&gt;
+&lt;author&gt;Created for ebike_ctrl project&lt;/author&gt;</description>
+<packages>
+<package name="SIP40_P254">
+<description>40-pin SIP, 2.54mm pitch, vertical mount&lt;br&gt;
+EA DOGXL240-7 display module connector&lt;br&gt;
+Left row: pins 1-20, Right row: pins 21-40</description>
+<!-- Left row: pins 1-20 at x=-1.27 -->
+<pad name="1" x="-1.27" y="24.13" drill="1.0" diameter="1.8" shape="square"/>
+<pad name="2" x="-1.27" y="21.59" drill="1.0" diameter="1.8"/>
+<pad name="3" x="-1.27" y="19.05" drill="1.0" diameter="1.8"/>
+<pad name="4" x="-1.27" y="16.51" drill="1.0" diameter="1.8"/>
+<pad name="5" x="-1.27" y="13.97" drill="1.0" diameter="1.8"/>
+<pad name="6" x="-1.27" y="11.43" drill="1.0" diameter="1.8"/>
+<pad name="7" x="-1.27" y="8.89" drill="1.0" diameter="1.8"/>
+<pad name="8" x="-1.27" y="6.35" drill="1.0" diameter="1.8"/>
+<pad name="9" x="-1.27" y="3.81" drill="1.0" diameter="1.8"/>
+<pad name="10" x="-1.27" y="1.27" drill="1.0" diameter="1.8"/>
+<pad name="11" x="-1.27" y="-1.27" drill="1.0" diameter="1.8"/>
+<pad name="12" x="-1.27" y="-3.81" drill="1.0" diameter="1.8"/>
+<pad name="13" x="-1.27" y="-6.35" drill="1.0" diameter="1.8"/>
+<pad name="14" x="-1.27" y="-8.89" drill="1.0" diameter="1.8"/>
+<pad name="15" x="-1.27" y="-11.43" drill="1.0" diameter="1.8"/>
+<pad name="16" x="-1.27" y="-13.97" drill="1.0" diameter="1.8"/>
+<pad name="17" x="-1.27" y="-16.51" drill="1.0" diameter="1.8"/>
+<pad name="18" x="-1.27" y="-19.05" drill="1.0" diameter="1.8"/>
+<pad name="19" x="-1.27" y="-21.59" drill="1.0" diameter="1.8"/>
+<pad name="20" x="-1.27" y="-24.13" drill="1.0" diameter="1.8"/>
+<!-- Right row: pins 21-40 at x=1.27 -->
+<pad name="21" x="1.27" y="24.13" drill="1.0" diameter="1.8"/>
+<pad name="22" x="1.27" y="21.59" drill="1.0" diameter="1.8"/>
+<pad name="23" x="1.27" y="19.05" drill="1.0" diameter="1.8"/>
+<pad name="24" x="1.27" y="16.51" drill="1.0" diameter="1.8"/>
+<pad name="25" x="1.27" y="13.97" drill="1.0" diameter="1.8"/>
+<pad name="26" x="1.27" y="11.43" drill="1.0" diameter="1.8"/>
+<pad name="27" x="1.27" y="8.89" drill="1.0" diameter="1.8"/>
+<pad name="28" x="1.27" y="6.35" drill="1.0" diameter="1.8"/>
+<pad name="29" x="1.27" y="3.81" drill="1.0" diameter="1.8"/>
+<pad name="30" x="1.27" y="1.27" drill="1.0" diameter="1.8"/>
+<pad name="31" x="1.27" y="-1.27" drill="1.0" diameter="1.8"/>
+<pad name="32" x="1.27" y="-3.81" drill="1.0" diameter="1.8"/>
+<pad name="33" x="1.27" y="-6.35" drill="1.0" diameter="1.8"/>
+<pad name="34" x="1.27" y="-8.89" drill="1.0" diameter="1.8"/>
+<pad name="35" x="1.27" y="-11.43" drill="1.0" diameter="1.8"/>
+<pad name="36" x="1.27" y="-13.97" drill="1.0" diameter="1.8"/>
+<pad name="37" x="1.27" y="-16.51" drill="1.0" diameter="1.8"/>
+<pad name="38" x="1.27" y="-19.05" drill="1.0" diameter="1.8"/>
+<pad name="39" x="1.27" y="-21.59" drill="1.0" diameter="1.8"/>
+<pad name="40" x="1.27" y="-24.13" drill="1.0" diameter="1.8"/>
+<!-- Display outline -->
+<wire x1="-5" y1="26" x2="5" y2="26" width="0.127" layer="21"/>
+<wire x1="5" y1="26" x2="5" y2="-26" width="0.127" layer="21"/>
+<wire x1="5" y1="-26" x2="-5" y2="-26" width="0.127" layer="21"/>
+<wire x1="-5" y1="-26" x2="-5" y2="26" width="0.127" layer="21"/>
+<!-- Display active area -->
+<wire x1="-3.5" y1="24.5" x2="3.5" y2="24.5" width="0.05" layer="51"/>
+<wire x1="3.5" y1="24.5" x2="3.5" y2="-24.5" width="0.05" layer="51"/>
+<wire x1="3.5" y1="-24.5" x2="-3.5" y2="-24.5" width="0.05" layer="51"/>
+<wire x1="-3.5" y1="-24.5" x2="-3.5" y2="24.5" width="0.05" layer="51"/>
+<text x="0" y="27.5" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="-27.5" size="1.27" layer="27" align="center">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="EA_DOGXL240W-7">
+<wire x1="-17.78" y1="25.4" x2="17.78" y2="25.4" width="0.254" layer="94"/>
+<wire x1="17.78" y1="-25.4" x2="17.78" y2="25.4" width="0.254" layer="94"/>
+<wire x1="17.78" y1="-25.4" x2="-17.78" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="-17.78" y1="25.4" x2="-17.78" y2="-25.4" width="0.254" layer="94"/>
+<text x="-6.35" y="27.94" size="1.778" layer="95" align="center-left">&gt;NAME</text>
+<text x="-6.35" y="-27.94" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
+<!-- Left side: pins 1-20 (NC pins) -->
+<pin name="1_NC_A1" x="-22.86" y="24.13" length="middle" direction="nc"/>
+<pin name="2_NC_A2" x="-22.86" y="21.59" length="middle" direction="nc"/>
+<pin name="3_NC_A3" x="-22.86" y="19.05" length="middle" direction="nc"/>
+<pin name="4_NC" x="-22.86" y="16.51" length="middle" direction="nc"/>
+<pin name="5_NC" x="-22.86" y="13.97" length="middle" direction="nc"/>
+<pin name="6_NC" x="-22.86" y="11.43" length="middle" direction="nc"/>
+<pin name="7_NC" x="-22.86" y="8.89" length="middle" direction="nc"/>
+<pin name="8_NC" x="-22.86" y="6.35" length="middle" direction="nc"/>
+<pin name="9_NC" x="-22.86" y="3.81" length="middle" direction="nc"/>
+<pin name="10_NC" x="-22.86" y="1.27" length="middle" direction="nc"/>
+<pin name="11_NC" x="-22.86" y="-1.27" length="middle" direction="nc"/>
+<pin name="12_NC" x="-22.86" y="-3.81" length="middle" direction="nc"/>
+<pin name="13_NC" x="-22.86" y="-6.35" length="middle" direction="nc"/>
+<pin name="14_NC" x="-22.86" y="-8.89" length="middle" direction="nc"/>
+<pin name="15_NC" x="-22.86" y="-11.43" length="middle" direction="nc"/>
+<pin name="16_NC" x="-22.86" y="-13.97" length="middle" direction="nc"/>
+<pin name="17_NC" x="-22.86" y="-16.51" length="middle" direction="nc"/>
+<pin name="18_NC_C1" x="-22.86" y="-19.05" length="middle" direction="nc"/>
+<pin name="19_NC_C2" x="-22.86" y="-21.59" length="middle" direction="nc"/>
+<pin name="20_NC_C3" x="-22.86" y="-24.13" length="middle" direction="nc"/>
+<!-- Right side: pins 21-40 (functional pins) -->
+<pin name="21_VB0+" x="22.86" y="24.13" length="middle" rot="R180"/>
+<pin name="22_VB1+" x="22.86" y="21.59" length="middle" rot="R180"/>
+<pin name="23_VB1-" x="22.86" y="19.05" length="middle" rot="R180"/>
+<pin name="24_VB0-" x="22.86" y="16.51" length="middle" rot="R180"/>
+<pin name="25_VA0+" x="22.86" y="13.97" length="middle" rot="R180"/>
+<pin name="26_VA1+" x="22.86" y="11.43" length="middle" rot="R180"/>
+<pin name="27_VA1-" x="22.86" y="8.89" length="middle" rot="R180"/>
+<pin name="28_VA0-" x="22.86" y="6.35" length="middle" rot="R180"/>
+<pin name="29_VLCD" x="22.86" y="3.81" length="middle" rot="R180"/>
+<pin name="30_VDD" x="22.86" y="1.27" length="middle" direction="pwr" rot="R180"/>
+<pin name="31_VSS" x="22.86" y="-1.27" length="middle" direction="pwr" rot="R180"/>
+<pin name="32_VSS" x="22.86" y="-3.81" length="middle" direction="pwr" rot="R180"/>
+<pin name="33_BM0" x="22.86" y="-6.35" length="middle" rot="R180"/>
+<pin name="34_CD" x="22.86" y="-8.89" length="middle" rot="R180"/>
+<pin name="35_CS1" x="22.86" y="-11.43" length="middle" rot="R180"/>
+<pin name="36_CS0" x="22.86" y="-13.97" length="middle" rot="R180"/>
+<pin name="37_RST" x="22.86" y="-16.51" length="middle" rot="R180"/>
+<pin name="38_SCK" x="22.86" y="-19.05" length="middle" rot="R180"/>
+<pin name="39_SDA" x="22.86" y="-21.59" length="middle" rot="R180"/>
+<pin name="40_D13" x="22.86" y="-24.13" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="EA-DOGXL240W-7" prefix="LCD">
+<description>&lt;b&gt;EA DOGXL240W-7 240x128 COG LCD Display&lt;/b&gt;&lt;p&gt;
+Display Visions / Electronic Assembly&lt;br&gt;
+240x128 FSTN Positive Transflective, UC1611S controller&lt;br&gt;
+Interfaces: 3-wire SPI, 4-wire SPI, I2C&lt;br&gt;
+Supply: 2.7-3.3V, 40-pin SIP 2.54mm&lt;br&gt;
+Operating temp: -20..+70 C&lt;p&gt;
+Source: &lt;a href="https://www.lcd-module.com/fileadmin/eng/pdf/grafik/dogxl240-7e.pdf"&gt;Datasheet (PDF)&lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="EA_DOGXL240W-7" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SIP40_P254">
+<connects>
+<connect gate="G$1" pin="1_NC_A1" pad="1"/>
+<connect gate="G$1" pin="2_NC_A2" pad="2"/>
+<connect gate="G$1" pin="3_NC_A3" pad="3"/>
+<connect gate="G$1" pin="4_NC" pad="4"/>
+<connect gate="G$1" pin="5_NC" pad="5"/>
+<connect gate="G$1" pin="6_NC" pad="6"/>
+<connect gate="G$1" pin="7_NC" pad="7"/>
+<connect gate="G$1" pin="8_NC" pad="8"/>
+<connect gate="G$1" pin="9_NC" pad="9"/>
+<connect gate="G$1" pin="10_NC" pad="10"/>
+<connect gate="G$1" pin="11_NC" pad="11"/>
+<connect gate="G$1" pin="12_NC" pad="12"/>
+<connect gate="G$1" pin="13_NC" pad="13"/>
+<connect gate="G$1" pin="14_NC" pad="14"/>
+<connect gate="G$1" pin="15_NC" pad="15"/>
+<connect gate="G$1" pin="16_NC" pad="16"/>
+<connect gate="G$1" pin="17_NC" pad="17"/>
+<connect gate="G$1" pin="18_NC_C1" pad="18"/>
+<connect gate="G$1" pin="19_NC_C2" pad="19"/>
+<connect gate="G$1" pin="20_NC_C3" pad="20"/>
+<connect gate="G$1" pin="21_VB0+" pad="21"/>
+<connect gate="G$1" pin="22_VB1+" pad="22"/>
+<connect gate="G$1" pin="23_VB1-" pad="23"/>
+<connect gate="G$1" pin="24_VB0-" pad="24"/>
+<connect gate="G$1" pin="25_VA0+" pad="25"/>
+<connect gate="G$1" pin="26_VA1+" pad="26"/>
+<connect gate="G$1" pin="27_VA1-" pad="27"/>
+<connect gate="G$1" pin="28_VA0-" pad="28"/>
+<connect gate="G$1" pin="29_VLCD" pad="29"/>
+<connect gate="G$1" pin="30_VDD" pad="30"/>
+<connect gate="G$1" pin="31_VSS" pad="31"/>
+<connect gate="G$1" pin="32_VSS" pad="32"/>
+<connect gate="G$1" pin="33_BM0" pad="33"/>
+<connect gate="G$1" pin="34_CD" pad="34"/>
+<connect gate="G$1" pin="35_CS1" pad="35"/>
+<connect gate="G$1" pin="36_CS0" pad="36"/>
+<connect gate="G$1" pin="37_RST" pad="37"/>
+<connect gate="G$1" pin="38_SCK" pad="38"/>
+<connect gate="G$1" pin="39_SDA" pad="39"/>
+<connect gate="G$1" pin="40_D13" pad="40"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="DESCRIPTION" value="EA DOGXL240W-7 240x128 COG LCD, FSTN, UC1611S, SPI/I2C, 3.3V" constant="no"/>
+<attribute name="MANUFACTURER_NAME" value="Display Visions" constant="no"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="EA DOGXL240W-7" constant="no"/>
+<attribute name="HEIGHT" value="6.5mm" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>

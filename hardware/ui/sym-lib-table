@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "NUCLEO-G431KB")(type "EAGLE")(uri "${KIPRJMOD}/NUCLEO-G431KB.lbr")(options "")(descr ""))
+  (lib (name "EA-DOGXL240W-7")(type "EAGLE")(uri "${KIPRJMOD}/EA-DOGXL240W-7.lbr")(options "")(descr ""))
+)
