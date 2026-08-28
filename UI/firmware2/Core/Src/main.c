@@ -21,7 +21,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd/lcd_uc1611s_graphics.h"
+#include "lcd/lcd_font_small.h"
+#include "lcd/lcd_font_medium.h"
+#include "lcd/lcd_font_large.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -109,7 +113,13 @@ int main(void)
   MX_USART1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-
+  lcd_init();
+  lcd_fill(0);
+  lcd_text(10, 10, "ebike_ctrl", font_large);
+  lcd_text(10, 40, "UI firmware2", font_medium);
+  lcd_text(10, 65, "STM32G431KB + UC1611S", font_small);
+  lcd_text(10, 80, "240x128 COG LCD", font_small);
+  lcd_flush();
   /* USER CODE END 2 */
 
   /* Initialize leds */
@@ -129,6 +139,7 @@ int main(void)
   /* USER CODE BEGIN BSP */
 
   /* -- Sample board code to send message over COM1 port ---- */
+  HAL_Delay(100);
   printf("Welcome to STM32 world !\n\r");
 
   /* -- Sample board code to switch on leds ---- */
@@ -493,6 +504,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+int _write(int file, char *ptr, int len)
+{
+  (void)file;
+  HAL_UART_Transmit(&hcom_uart[COM1], (uint8_t *)ptr, (uint16_t)len, HAL_MAX_DELAY);
+  return len;
+}
 
 /* USER CODE END 4 */
 

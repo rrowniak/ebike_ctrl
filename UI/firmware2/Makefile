@@ -39,6 +39,11 @@ C_SOURCES =  \
 Core/Src/main.c \
 Core/Src/stm32g4xx_it.c \
 Core/Src/stm32g4xx_hal_msp.c \
+Core/Src/lcd/lcd_uc1611s.c \
+Core/Src/lcd/lcd_uc1611s_graphics.c \
+Core/Src/lcd/lcd_font_small.c \
+Core/Src/lcd/lcd_font_medium.c \
+Core/Src/lcd/lcd_font_large.c \
 Drivers/BSP/STM32G4xx_Nucleo/stm32g4xx_nucleo.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_fdcan.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c \

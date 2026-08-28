@@ -87,6 +87,8 @@ void Error_Handler(void);
 
 /* USER CODE END Private defines */
 
+extern SPI_HandleTypeDef hspi1;
+
 #ifdef __cplusplus
 }
 #endif
