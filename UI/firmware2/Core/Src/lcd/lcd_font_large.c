@@ -389,5 +389,6 @@ const lcd_font_t font_large = {
     .height       = 24,
     .first_char   = 0x20,
     .last_char    = 0x7E,
-    .bytes_per_char = 24,
+    .bytes_per_char = 36,
+    .row_major    = LCD_FONT_ROW_MAJOR,
 };

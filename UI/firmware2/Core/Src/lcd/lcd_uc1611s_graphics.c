@@ -101,11 +101,24 @@ void lcd_text(int x, int y, const char *str, lcd_font_t font)
         unsigned char_idx = *str - font.first_char;
         const uint8_t *glyph = &font.data[char_idx * font.bytes_per_char];
 
-        for (int col = 0; col < font.width; col++) {
-            uint8_t bits = glyph[col];
+        if (font.row_major) {
             for (int row = 0; row < font.height; row++) {
-                if (bits & (1U << row))
-                    lcd_pixel(x + col, y + row, 1);
+                uint8_t bits = glyph[row];
+                for (int col = 0; col < 8; col++) {
+                    if (bits & (1U << (7 - col)))
+                        lcd_pixel(x + col, y + row, 1);
+                }
+            }
+        } else {
+            int planes = font.height / 8;
+            for (int col = 0; col < font.width; col++) {
+                for (int plane = 0; plane < planes; plane++) {
+                    uint8_t bits = glyph[plane * font.width + col];
+                    for (int row = 0; row < 8; row++) {
+                        if (bits & (1U << row))
+                            lcd_pixel(x + col, y + plane * 8 + row, 1);
+                    }
+                }
             }
         }
 

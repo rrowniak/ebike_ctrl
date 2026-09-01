@@ -16,6 +16,9 @@
 #define LCD_CMD_COL_LOW(n)      ((n) & 0x0F)
 #define LCD_CMD_PAGE(n)         (0x60 | ((n) & 0x0F))
 
+#define LCD_FONT_COLUMN_MAJOR 0
+#define LCD_FONT_ROW_MAJOR    1
+
 typedef struct {
     const uint8_t *data;
     uint8_t width;
@@ -23,6 +26,7 @@ typedef struct {
     uint8_t first_char;
     uint8_t last_char;
     uint8_t bytes_per_char;
+    uint8_t row_major;
 } lcd_font_t;
 
 #endif /* LCD_CONFIG_H */

@@ -105,4 +105,5 @@ const lcd_font_t font_small = {
     .first_char   = 0x20,
     .last_char    = 0x7E,
     .bytes_per_char = 6,
+    .row_major    = LCD_FONT_COLUMN_MAJOR,
 };
