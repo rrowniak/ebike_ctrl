@@ -3,6 +3,7 @@
 #include "lcd/lcd_font_small.h"
 #include "lcd/lcd_font_medium.h"
 #include "lcd/lcd_font_large.h"
+#include "lcd/lcd_font_xlarge.h"
 #include <stdio.h>
 
 /* Out-of-font glyph marker rendered as a degree sign (0x7F is outside the
@@ -12,22 +13,35 @@
 
 /* Screen geometry */
 #define COL_DIV_X 160
-#define BAR_Y     10
+#define BAR_Y     18
 
-static const uint8_t icon_lights[8] = {
-    0x18, 0x18, 0x3C, 0x7E, 0x7E, 0x7E, 0x3C, 0x3C
+/* 16x16 status icons (bit 7 = leftmost column). */
+static const uint8_t icon_lights[32] = {
+    0x01,0x80, 0x01,0x80, 0x03,0xC0, 0x07,0xE0,
+    0x0F,0xF0, 0x1F,0xF8, 0x1F,0xF8, 0x0F,0xF0,
+    0x0F,0xF0, 0x0F,0xF0, 0x1F,0xF8, 0x1F,0xF8,
+    0x1F,0xF8, 0x0F,0xF0, 0x07,0xE0, 0x03,0xC0,
 };
 
-static const uint8_t icon_fault[8] = {
-    0x10, 0x38, 0x38, 0x7C, 0x7C, 0xFE, 0xFE, 0x7C
+static const uint8_t icon_fault[32] = {
+    0x01,0x80, 0x01,0x80, 0x03,0xC0, 0x03,0xC0,
+    0x07,0xE0, 0x07,0xE0, 0x0F,0xF0, 0x0F,0xF0,
+    0x1F,0xF8, 0x0F,0xF0, 0x07,0xE0, 0x03,0xC0,
+    0x1F,0xF8, 0x0F,0xF0, 0x07,0xE0, 0x03,0xC0,
 };
 
-static const uint8_t icon_offline[8] = {
-    0x00, 0x7E, 0x89, 0x91, 0xA1, 0xC1, 0x7E, 0x00
+static const uint8_t icon_offline[32] = {
+    0x00,0x00, 0x7F,0xFE, 0xFF,0xFF, 0xE0,0x07,
+    0xC8,0x13, 0x9B,0xD9, 0x9F,0xF9, 0x9F,0xF9,
+    0x9F,0xF9, 0x9F,0xF9, 0x9B,0xD9, 0xC8,0x13,
+    0xE0,0x07, 0xFF,0xFF, 0x7F,0xFE, 0x00,0x00,
 };
 
-static const uint8_t icon_alarm[8] = {
-    0x08, 0x08, 0x18, 0x18, 0x18, 0x3C, 0x3C, 0x3C
+static const uint8_t icon_alarm[32] = {
+    0x00,0x00, 0x00,0x00, 0x18,0x18, 0x18,0x18,
+    0x18,0x18, 0x18,0x18, 0x3C,0x3C, 0x3C,0x3C,
+    0x3C,0x3C, 0x5A,0x5A, 0x7E,0x7E, 0x3C,0x3C,
+    0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,
 };
 
 /* Render a string, drawing the DEG marker as a small ring (degree sign) in
@@ -75,11 +89,14 @@ static void text_deg_c(int cx, int y, const char *str, lcd_font_t font)
 
 static void draw_icon(int x, int y, const uint8_t *bmp)
 {
-    for (int row = 0; row < 8; row++) {
-        uint8_t bits = bmp[row];
-        for (int col = 0; col < 8; col++)
-            if (bits & (1U << (7 - col)))
+    for (int row = 0; row < 16; row++) {
+        uint8_t hi = bmp[row * 2];
+        uint8_t lo = bmp[row * 2 + 1];
+        for (int col = 0; col < 16; col++) {
+            uint8_t bit = (col < 8) ? (hi & (1U << (7 - col))) : (lo & (1U << (15 - col)));
+            if (bit)
                 lcd_pixel(x + col, y + row, 1);
+        }
     }
 }
 
@@ -93,6 +110,7 @@ void test_screen(void)
     text_deg(48, 26, "0123456789.+-/%" DEG_STR "CAWAhkmV", font_small);
     text_deg(24, 36, "0123456789.+-/%" DEG_STR "CAWAhkmV", font_medium);
     text_deg(24, 54, "0123456789.+-/%" DEG_STR, font_large);
+    text_deg(24, 76, "25.3-", font_xlarge);
     text_deg(72, 92, "CAWAhkmV", font_large);
 }
 
@@ -102,58 +120,46 @@ void main_screen_p1(const screens_data_t *d)
     lcd_fill(0);
 
     /* ---- Status bar ---- */
-    int ix = 4;
-    if (d->lights_on) { draw_icon(ix, 1, icon_lights); ix += 10; }
-    if (d->fault)     { draw_icon(ix, 1, icon_fault);  ix += 10; }
-    if (d->offline)   { draw_icon(ix, 1, icon_offline); ix += 10; }
-    if (d->alarm)     { draw_icon(ix, 1, icon_alarm);  ix += 10; }
+    int ix = 2;
+    if (d->lights_on) { draw_icon(ix, 1, icon_lights); ix += 18; }
+    if (d->fault)     { draw_icon(ix, 1, icon_fault);  ix += 18; }
+    if (d->offline)   { draw_icon(ix, 1, icon_offline); ix += 18; }
+    if (d->alarm)     { draw_icon(ix, 1, icon_alarm);  ix += 18; }
 
     snprintf(buf, sizeof buf, "%d/%d", d->page, d->pages);
-    lcd_text(LCD_WIDTH - 6 - lcd_text_width(buf, font_small), 1, buf, font_small);
+    lcd_text(LCD_WIDTH - 6 - lcd_text_width(buf, font_medium), 5, buf, font_medium);
 
     lcd_hline(0, BAR_Y, LCD_WIDTH, 1);
     lcd_vline(COL_DIV_X, BAR_Y + 1, LCD_HEIGHT - BAR_Y - 1, 1);
 
     /* ---- Left column: riding data ---- */
     snprintf(buf, sizeof buf, "%d.%d", d->speed_x10 / 10, d->speed_x10 % 10);
-    text_deg_c(COL_DIV_X / 2, 16, buf, font_large);
-    text_deg_c(COL_DIV_X / 2, 58, "km/h", font_small);
+    text_deg_c(COL_DIV_X / 2, 20, buf, font_xlarge);
+    text_deg_c(COL_DIV_X / 2, 72, "km/h", font_medium);
 
-    lcd_hline(20, 100, 120, 1);
+    lcd_hline(20, 92, 124, 1);
 
     snprintf(buf, sizeof buf, "%u W", d->watts);
-    text_deg(38, 105, buf, font_medium);
-    lcd_vline(89, 110, 10, 1);
+    text_deg(24, 98, buf, font_medium);
+    lcd_vline(85, 100, 12, 1);
     snprintf(buf, sizeof buf, "%d" DEG_STR "C", d->temp_c);
-    text_deg(99, 114, buf, font_small);
+    text_deg(96, 98, buf, font_medium);
 
     /* ---- Right column: battery block ---- */
-    /* Battery icon centered in right column (x 160..240) */
-    int bx = 167, by = 16;
-    lcd_rect(bx, by, 22, 15, 1);
-    lcd_rect(bx + 22, by + 4, 4, 7, 1);
+    /* Single battery visualization: fill-style icon + SOC% + V + range. */
+    const int bx = 190, by = 26;               /* battery outline, centered ~x202 */
+    lcd_rect(bx, by, 24, 15, 1);
+    lcd_rect(bx - 3, by + 4, 3, 7, 1);
     int fill = 22 * d->soc / 100;
     if (fill > 0)
         lcd_fill_rect(bx + 1, by + 1, fill, 13, 1);
 
-    snprintf(buf, sizeof buf, "%u%%", d->soc);
-    text_deg_c(200, 34, buf, font_large);
+    snprintf(buf, sizeof buf, "%u", d->soc);   /* SOC number in xlarge */
+    text_deg(202 - lcd_text_width(buf, font_xlarge) / 2, 48, buf, font_xlarge);
+    lcd_text(202 + lcd_text_width(buf, font_xlarge) / 2 + 2, 48, "%", font_large);
 
-    int cells = 10;
-    int cw = 6;
-    int bar_x = 200 - (cells * cw + cells - 1) / 2;
-    lcd_rect(bar_x - 2, 74, cells * cw + cells - 1 + 4, 12, 1);
-    int cells_filled = cells * d->soc / 100;
-    for (int i = 0; i < cells; i++) {
-        int cx = bar_x + i * (cw + 1);
-        if (i < cells_filled)
-            lcd_fill_rect(cx, 77, cw, 6, 1);
-        else
-            lcd_rect(cx, 77, cw, 6, 1);
-    }
-
-    snprintf(buf, sizeof buf, "%u.%u V", d->voltage_x10 / 10, d->voltage_x10 % 10);
-    text_deg(164, 100, buf, font_small);
-    snprintf(buf, sizeof buf, "%u km", d->range_km);
-    text_deg(205, 100, buf, font_small);
+    snprintf(buf, sizeof buf, "%u.%uV", d->voltage_x10 / 10, d->voltage_x10 % 10);
+    text_deg_c(COL_DIV_X + (LCD_WIDTH - COL_DIV_X) / 2, 100, buf, font_medium);
+    snprintf(buf, sizeof buf, "%ukm", d->range_km);
+    text_deg_c(COL_DIV_X + (LCD_WIDTH - COL_DIV_X) / 2, 118, buf, font_medium);
 }
