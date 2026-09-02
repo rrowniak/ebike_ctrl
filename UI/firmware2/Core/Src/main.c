@@ -25,6 +25,7 @@
 #include "lcd/lcd_font_small.h"
 #include "lcd/lcd_font_medium.h"
 #include "lcd/lcd_font_large.h"
+#include "screens.h"
 #include <stdio.h>
 /* USER CODE END Includes */
 
@@ -69,6 +70,9 @@ static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_Init(void);
 static void MX_ADC1_Init(void);
+
+void welcome_screen();
+static screens_data_t demo_data(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -115,11 +119,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
   lcd_init();
   lcd_fill(0);
-  lcd_text(10, 10, "ebike_ctrl", font_large);
-  lcd_text(10, 40, "UI firmware2", font_medium);
-  lcd_text(10, 65, "STM32G431KB + UC1611S", font_small);
-  lcd_text(10, 80, "240x128 COG LCD", font_small);
+  welcome_screen();
   lcd_flush();
+  HAL_Delay(1000);
+
+  test_screen();
+  lcd_flush();
+  HAL_Delay(1000);
   /* USER CODE END 2 */
 
   /* Initialize leds */
@@ -154,7 +160,11 @@ int main(void)
 
 /* -- Sample board code to toggle leds ---- */
        BSP_LED_Toggle(LED_GREEN);
-       HAL_Delay(500);
+
+       screens_data_t demo = demo_data();
+       main_screen_p1(&demo);
+       lcd_flush();
+       HAL_Delay(250);
 
     /* USER CODE END WHILE */
 
@@ -504,6 +514,42 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+static uint32_t s_rng_state;
+
+static uint32_t rng_next(void)
+{
+  if (s_rng_state == 0)
+    s_rng_state = HAL_GetTick();
+  s_rng_state = s_rng_state * 1664525u + 1013904223u;
+  return s_rng_state;
+}
+
+static screens_data_t demo_data(void)
+{
+  screens_data_t d;
+  d.speed_x10   = 210 + rng_next() % 60;
+  d.watts       = 150 + rng_next() % 360;
+  d.temp_c      = 17 + rng_next() % 9;
+  d.soc         = 70 + rng_next() % 16;
+  d.voltage_x10 = 312 + rng_next() % 16;
+  d.range_km    = 40 + rng_next() % 22;
+  d.lights_on   = 1;
+  d.fault       = 1;
+  d.offline     = 1;
+  d.alarm       = 1;
+  d.page        = 1;
+  d.pages       = 2;
+  return d;
+}
+
+void welcome_screen() {
+  lcd_text(10, 10, "ebike controller", font_large);
+  lcd_text(10, 40, "by Rafal Rowniak", font_medium);
+  lcd_text(10, 65, "v2.0 2026", font_small);
+  lcd_text(10, 90, "hardware: STM32G431KB + UC1611S", font_small);
+  lcd_text(10, 105, "screen:   240x128 COG LCD", font_small);
+}
 
 int _write(int file, char *ptr, int len)
 {
