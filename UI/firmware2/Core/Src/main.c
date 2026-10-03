@@ -169,6 +169,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
   }
   /* USER CODE END 3 */
 }
@@ -515,6 +516,22 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+/* Demo trip meters step through readings of 1, 2 and 3 digits, up and back
+   down, so every text width the status bar has to fit is actually visible. */
+#define TRIP_STEP_MS  1200u
+#define DEMO_STEPS    5
+
+static const uint32_t demo_dist_m[]  = { 0, 1200, 12000, 120000, 999900 };
+static const uint32_t demo_wh_x10[]  = { 0, 1200, 12000, 120000,  99999 };
+static const uint32_t demo_move_s[]  = { 0,   90,   600,   3600,  45296 };
+
+/* Index into a demo table, walking to the end and back. */
+static uint32_t demo_triangle(uint32_t tick, uint32_t step_ms)
+{
+  uint32_t i = (tick / step_ms) % (2 * (DEMO_STEPS - 1));
+  return i < DEMO_STEPS ? i : 2 * (DEMO_STEPS - 1) - i;
+}
+
 static uint32_t s_rng_state;
 
 static uint32_t rng_next(void)
@@ -525,15 +542,36 @@ static uint32_t rng_next(void)
   return s_rng_state;
 }
 
+static int32_t clamp32(int32_t v, int32_t lo, int32_t hi)
+{
+  if (v < lo) return lo;
+  if (v > hi) return hi;
+  return v;
+}
+
 static screens_data_t demo_data(void)
 {
   screens_data_t d;
-  d.speed_x10   = 210 + rng_next() % 60;
-  d.watts       = 150 + rng_next() % 360;
+
+  /* Speed wanders slowly instead of jumping every frame. */
+  static int32_t speed_x10 = 220;
+  speed_x10 = clamp32(speed_x10 + (int32_t)(rng_next() % 9) - 4, 0, 550);
+
+  /* Trip meters step through 1, 2 and 3 digit readings; the clock runs at
+     half the step rate so the two fields show different widths at times. */
+  uint32_t tick = HAL_GetTick();
+  uint32_t di = demo_triangle(tick, TRIP_STEP_MS);
+  uint32_t ti = demo_triangle(tick + TRIP_STEP_MS, 2 * TRIP_STEP_MS);
+
+  d.speed_x10   = speed_x10;
+  d.watts       = speed_x10 / 2 + rng_next() % 60;
   d.temp_c      = 17 + rng_next() % 9;
   d.soc         = 70 + rng_next() % 16;
   d.voltage_x10 = 312 + rng_next() % 16;
   d.range_km    = 40 + rng_next() % 22;
+  d.trip_m      = demo_dist_m[di];
+  d.trip_wh_x10 = demo_wh_x10[di];
+  d.trip_move_s = demo_move_s[ti];
   d.lights_on   = 1;
   d.fault       = 1;
   d.offline     = 1;
