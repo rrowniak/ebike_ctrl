@@ -1,9 +1,8 @@
 *.lck
 .agents
-AGENTS.md
 archive
 *#
-spec/*.pdf
+docs/specs/*.pdf
 .mxproject
 
 # Build output directories
@@ -29,3 +28,12 @@ tests/test
 # Prebuilt static/shared libraries
 *.a
 *.lib
+
+# KiCad local settings and backups
+*.bak
+*-bak
+*.bck
+*.kicad_prl
+_autosave-*
+*-cache.lib
+fp-info-cache

@@ -25,6 +25,23 @@ It concists of three parts:
 
 * [l_rr library](https://github.com/rrowniak/l_rr)
 
+## Repository layout
+
+```
+boards/
+  motherboard/f103/   legacy firmware + KiCad
+  ui/f103/            legacy firmware + KiCad
+  ui/g431/            current firmware + KiCad
+protocol/             CAN wire format shared by both boards
+tools/common.mk       shared LRR/protocol build paths
+docs/                 specs, datasheets, images
+hardware/lib/         shared KiCad libraries
+```
+
+Each firmware project builds independently; see its `Makefile.inc` and
+[`AGENTS.md`](./AGENTS.md) for commands. Override dependency paths on the make
+command line, e.g. `make LRR_PATH=/path/to/l_rr`.
+
 ## License
 
 Copyright (c) 2020 Rafal Rowniak rrowniak.com
